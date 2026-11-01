@@ -1,0 +1,408 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: Calendar from 2016-01-01 through 2018-12-31, with Brazilian federal holidays and the 2017 Black Friday week.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: date_day
+        data_type: date
+        constraints:
+          - type: not_null
+          - type: unique
+        tests: [not_null, unique]
+      - name: calendar_year
+        data_type: bigint
+      - name: calendar_quarter
+        data_type: bigint
+      - name: calendar_month
+        data_type: bigint
+      - name: month_name
+        data_type: varchar
+      - name: week_start
+        data_type: date
+      - name: iso_day_of_week
+        data_type: bigint
+      - name: day_name
+        data_type: varchar
+      - name: is_weekend
+        data_type: boolean
+      - name: is_national_holiday
+        data_type: boolean
+      - name: holiday_name
+        data_type: varchar
+      - name: is_black_friday_week
+        data_type: boolean
+
+  - name: dim_customer_geo
+    description: Customer city and state, the geography grain used by the deliveries fact.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: customer_geo_key
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: unique
+        tests: [not_null, unique]
+      - name: customer_state
+        data_type: varchar
+        tests: [not_null]
+      - name: customer_state_name
+        data_type: varchar
+      - name: customer_city
+        data_type: varchar
+      - name: customer_region
+        data_type: varchar
+        tests:
+          - accepted_values:
+              values: [North, Northeast, Central-West, Southeast, South, Unknown]
+
+  - name: dim_seller
+    description: One row per seller.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: seller_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: unique
+        tests: [not_null, unique]
+      - name: seller_city
+        data_type: varchar
+      - name: seller_state
+        data_type: varchar
+      - name: seller_state_name
+        data_type: varchar
+      - name: seller_region
+        data_type: varchar
+      - name: seller_zip_code_prefix
+        data_type: varchar
+
+  - name: dim_product_category
+    description: Product category in English where the translation exists, otherwise the Portuguese name, otherwise unknown.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: category_key
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: unique
+        tests: [not_null, unique]
+      - name: category_name_pt
+        data_type: varchar
+      - name: category_name_en
+        data_type: varchar
+      - name: category_label
+        data_type: varchar
+
+  - name: dim_lane
+    description: Seller state to customer state. The lane key is `SP>RJ` style.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: lane_key
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: unique
+        tests: [not_null, unique]
+      - name: seller_state
+        data_type: varchar
+      - name: seller_state_name
+        data_type: varchar
+      - name: seller_region
+        data_type: varchar
+      - name: customer_state
+        data_type: varchar
+      - name: customer_state_name
+        data_type: varchar
+      - name: customer_region
+        data_type: varchar
+      - name: is_intrastate
+        data_type: boolean
+      - name: is_same_region
+        data_type: boolean
+
+  - name: fct_order_lines
+    description: >
+      One row per order line. Freight, weight and straight-line distance live here.
+      The delivery clock does not: Olist stores that once per order, on fct_deliveries.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: order_line_key
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: unique
+        tests: [not_null, unique]
+      - name: order_id
+        data_type: varchar
+        tests: [not_null]
+      - name: order_item_id
+        data_type: bigint
+        tests: [not_null]
+      - name: product_id
+        data_type: varchar
+      - name: seller_id
+        data_type: varchar
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_seller')
+              field: seller_id
+      - name: customer_geo_key
+        data_type: varchar
+        tests:
+          - relationships:
+              to: ref('dim_customer_geo')
+              field: customer_geo_key
+      - name: category_key
+        data_type: varchar
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_product_category')
+              field: category_key
+      - name: lane_key
+        data_type: varchar
+        tests:
+          - relationships:
+              to: ref('dim_lane')
+              field: lane_key
+      - name: order_date
+        data_type: date
+        tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_day
+      - name: in_scope
+        data_type: boolean
+      - name: price
+        data_type: double
+        tests: [not_null]
+      - name: freight_value
+        data_type: double
+        tests: [not_null]
+      - name: product_weight_g
+        data_type: double
+      - name: product_length_cm
+        data_type: double
+      - name: product_height_cm
+        data_type: double
+      - name: product_width_cm
+        data_type: double
+      - name: freight_per_kg
+        data_type: double
+      - name: distance_km
+        data_type: double
+      - name: freight_per_km
+        data_type: double
+      - name: shipping_limit_date
+        data_type: date
+      - name: seller_state
+        data_type: varchar
+      - name: seller_region
+        data_type: varchar
+      - name: customer_state
+        data_type: varchar
+      - name: customer_region
+        data_type: varchar
+      - name: is_primary_item
+        data_type: boolean
+
+  - name: fct_deliveries
+    description: >
+      One row per order. On-time compares the delivery calendar date with the
+      promised calendar date. Duration fields are null when the timestamps are
+      out of sequence, and those rows are counted on the anomaly flags.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: order_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: unique
+        tests: [not_null, unique]
+      - name: customer_unique_id
+        data_type: varchar
+      - name: customer_geo_key
+        data_type: varchar
+        tests:
+          - relationships:
+              to: ref('dim_customer_geo')
+              field: customer_geo_key
+      - name: customer_state
+        data_type: varchar
+      - name: customer_region
+        data_type: varchar
+      - name: customer_city
+        data_type: varchar
+      - name: primary_seller_id
+        data_type: varchar
+        tests:
+          - relationships:
+              to: ref('dim_seller')
+              field: seller_id
+      - name: seller_state
+        data_type: varchar
+      - name: seller_region
+        data_type: varchar
+      - name: lane_key
+        data_type: varchar
+        tests:
+          - relationships:
+              to: ref('dim_lane')
+              field: lane_key
+      - name: category_key
+        data_type: varchar
+        tests:
+          - relationships:
+              to: ref('dim_product_category')
+              field: category_key
+      - name: distance_km
+        data_type: double
+      - name: order_status
+        data_type: varchar
+        tests: [not_null]
+      - name: order_date
+        data_type: date
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_day
+      - name: approved_date
+        data_type: date
+      - name: carrier_date
+        data_type: date
+      - name: delivered_date
+        data_type: date
+      - name: estimated_date
+        data_type: date
+      - name: earliest_ship_limit_date
+        data_type: date
+      - name: in_scope
+        data_type: boolean
+      - name: is_delivered
+        data_type: boolean
+      - name: is_canceled
+        data_type: boolean
+      - name: is_unavailable
+        data_type: boolean
+      - name: is_single_seller
+        data_type: boolean
+      - name: n_items
+        data_type: bigint
+      - name: n_sellers
+        data_type: bigint
+      - name: merchandise_value
+        data_type: double
+      - name: freight_value
+        data_type: double
+      - name: payment_value
+        data_type: double
+      - name: freight_share
+        data_type: double
+      - name: max_installments
+        data_type: bigint
+      - name: primary_payment_type
+        data_type: varchar
+      - name: review_score
+        data_type: bigint
+      - name: review_rows
+        data_type: bigint
+      - name: total_weight_g
+        data_type: double
+      - name: freight_per_kg
+        data_type: double
+      - name: freight_per_km
+        data_type: double
+      - name: approval_days
+        data_type: bigint
+      - name: seller_handling_days
+        data_type: bigint
+      - name: carrier_transit_days
+        data_type: bigint
+      - name: delivery_days
+        data_type: bigint
+      - name: promise_days
+        data_type: bigint
+      - name: promise_padding_days
+        data_type: bigint
+      - name: days_vs_promise
+        data_type: bigint
+      - name: dispatch_vs_limit_days
+        data_type: bigint
+      - name: delivery_measurable
+        data_type: boolean
+      - name: is_on_time
+        data_type: boolean
+      - name: seller_missed_limit
+        data_type: boolean
+      - name: anomaly_carrier_before_purchase
+        data_type: boolean
+      - name: anomaly_transit_negative
+        data_type: boolean
+      - name: anomaly_handling_negative
+        data_type: boolean
+      - name: handling_clock_skew
+        data_type: boolean
+      - name: missing_delivery_timestamp
+        data_type: boolean
+      - name: items_missing_weight
+        data_type: bigint
+      - name: is_national_holiday
+        data_type: boolean
+      - name: holiday_name
+        data_type: varchar
+      - name: is_day_before_holiday
+        data_type: boolean
+      - name: is_black_friday_week
+        data_type: boolean
+
+  - name: metric_headline
+    description: One-row KPI contract for the closed cohort. Every dashboard headline number is selected from this model.
+    columns:
+      - name: orders
+        tests: [not_null]
+      - name: on_time_rate
+        tests: [not_null]
+      - name: measurable_orders
+        tests: [not_null]
+
+  - name: metric_weekly
+    description: Purchase week (Monday start) for the closed cohort.
+    columns:
+      - name: week_start
+        tests: [unique, not_null]
+
+  - name: metric_lane
+    description: Delivered-order performance by seller-state to customer-state lane.
+    columns:
+      - name: lane_key
+        tests: [unique, not_null]
+
+  - name: metric_state
+    description: Delivered-order performance by customer state.
+    columns:
+      - name: state
+        tests: [unique, not_null]
+
+  - name: metric_quality
+    description: Audit counts for the data-quality notes in the README. This mart is allowed to read staging so the raw-layer counts stay next to the fact-layer counts.
+    columns:
+      - name: cohort_orders
+        tests: [not_null]

@@ -1,0 +1,52 @@
+version: 2
+
+sources:
+  - name: raw
+    description: >
+      Immutable Parquet landing zone. Files are the pinned Olist snapshot plus
+      a locally generated Brazilian federal-holiday calendar. Column values are
+      the source strings; the only added column is _extracted_at.
+    schema: raw
+    tables:
+      - name: orders
+        description: One row per order from olist_orders_dataset.
+        meta:
+          external_location: "read_parquet('{{ env_var('RAW_DIR') }}/orders.parquet')"
+      - name: customers
+        description: One row per order-customer key from olist_customers_dataset.
+        meta:
+          external_location: "read_parquet('{{ env_var('RAW_DIR') }}/customers.parquet')"
+      - name: order_items
+        description: One row per order line from olist_order_items_dataset.
+        meta:
+          external_location: "read_parquet('{{ env_var('RAW_DIR') }}/order_items.parquet')"
+      - name: payments
+        description: One row per payment leg from olist_order_payments_dataset.
+        meta:
+          external_location: "read_parquet('{{ env_var('RAW_DIR') }}/payments.parquet')"
+      - name: reviews
+        description: Review rows from olist_order_reviews_dataset. An order can have more than one.
+        meta:
+          external_location: "read_parquet('{{ env_var('RAW_DIR') }}/reviews.parquet')"
+      - name: products
+        description: Product catalogue from olist_products_dataset.
+        meta:
+          external_location: "read_parquet('{{ env_var('RAW_DIR') }}/products.parquet')"
+      - name: sellers
+        description: Seller registry from olist_sellers_dataset.
+        meta:
+          external_location: "read_parquet('{{ env_var('RAW_DIR') }}/sellers.parquet')"
+      - name: geolocation
+        description: >
+          Zip-prefix coordinates from olist_geolocation_dataset. The source repeats
+          a prefix many times with slightly different points.
+        meta:
+          external_location: "read_parquet('{{ env_var('RAW_DIR') }}/geolocation.parquet')"
+      - name: category_translation
+        description: Portuguese to English category names.
+        meta:
+          external_location: "read_parquet('{{ env_var('RAW_DIR') }}/category_translation.parquet')"
+      - name: holidays
+        description: Brazilian federal public holidays, 2016-2018, from the holidays package.
+        meta:
+          external_location: "read_parquet('{{ env_var('RAW_DIR') }}/holidays.parquet')"

@@ -1,0 +1,9 @@
+supply_chain:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('WAREHOUSE_PATH') }}"
+      threads: 4
+      extensions:
+        - parquet
