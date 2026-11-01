@@ -215,8 +215,10 @@ def narrate(data: dict) -> dict:
             sellers_for_half = index
         if sellers_for_eighty is None and share >= 0.8:
             sellers_for_eighty = index
-        if index == 1 or index == 10 or index == seller_count or index % max(seller_count // 50, 1) == 0:
-            curve.append({"sellers": index, "gmv_share": share})
+        milestone = index in (sellers_for_half, sellers_for_eighty)
+        sampled = index == 1 or index == 10 or index == seller_count or index % max(seller_count // 50, 1) == 0
+        if sampled or milestone:
+            curve.append({"sellers": index, "gmv_share": share, "milestone": milestone})
     top10_share = sum(row["gmv"] or 0 for row in ranked[:10]) / gmv_total
 
     watch = [

@@ -3,191 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Delivery control tower</title>
-  <meta name="description" content="Delivery performance, freight and seller insights for a Brazilian marketplace, January 2017 to August 2018.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%2312383c'/%3E%3Cpath d='M7 21.5h18M9 17.5l7-7 7 7' stroke='%23f4f0e7' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <title>Overview · Delivery control tower</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%2312383c'/%3E%3Cpath d='M7 21.5h18M9 17.5l7-7 7 7' stroke='%23f4f0e7' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <a class="skip" href="#insights">Skip to insights</a>
-  <header class="top">
-    <div class="wrap top-inner">
-      <p class="eyebrow">Marketplace logistics · Brazil</p>
-      <div class="title-row">
-        <h1>Delivery control tower</h1>
-        <ul class="legend" aria-label="Status colours">
-          <li><span class="dot good"></span>Good</li>
-          <li><span class="dot watch"></span>Watch</li>
-          <li><span class="dot act"></span>Act</li>
-        </ul>
-      </div>
-      <p class="lede" id="lede">Loading the order history…</p>
-      <nav class="jump" aria-label="On this page">
-        <a href="#insights">Insights</a>
-        <a href="#promise">Promise</a>
-        <a href="#map">Map</a>
-        <a href="#cycle">Cycle time</a>
-        <a href="#reviews">Reviews</a>
-        <a href="#freight">Freight</a>
-        <a href="#sellers">Sellers</a>
-        <a href="#categories">Categories</a>
-        <a href="#calendar">Calendar</a>
-        <a href="#actions">Actions</a>
-      </nav>
-    </div>
+<a class="skip" href="#content">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="index.html">Control tower</a>
+  <nav class="nav" aria-label="Sections"><a href="index.html" aria-current="page">Overview</a><a href="delivery.html">Delivery</a><a href="routes.html">Routes</a><a href="customers.html">Customers</a><a href="freight.html">Freight</a><a href="sellers.html">Sellers</a><a href="actions.html">Actions</a></nav>
+</header>
+<main class="wrap" id="content">
+
+  <header class="page-head">
+    <h1 id="page-title">Overview</h1>
+    <p id="page-deck">Loading the order history…</p>
   </header>
+  <section class="kpis" id="kpis" aria-label="Headline measures"></section>
+  <section class="cards" id="insight-grid" aria-label="Biggest findings"></section>
 
-  <main class="wrap">
-    <section class="kpis" id="kpis" aria-label="Headline measures"></section>
-    <section class="strip" id="strip" aria-label="Other rates"></section>
-
-    <section class="block" id="insights">
-      <div class="block-head">
-        <h2>Top insights</h2>
-        <p class="deck">What the orders actually say, in the order a logistics lead should read them.</p>
-      </div>
-      <div class="insight-grid" id="insight-grid"></div>
-    </section>
-
-    <section class="block" id="promise">
-      <div class="block-head">
-        <h2>What we promised, and what arrived</h2>
-        <p class="takeaway" id="take-promise"></p>
-      </div>
-      <div class="card"><div id="chart-promise" class="chart"></div></div>
-    </section>
-
-    <section class="block" id="volume">
-      <div class="block-head">
-        <h2>Volume and on-time, week by week</h2>
-        <p class="takeaway" id="take-volume"></p>
-      </div>
-      <div class="card"><div id="chart-volume" class="chart"></div></div>
-    </section>
-
-    <section class="block" id="map">
-      <div class="block-head">
-        <h2>Where the wait actually is</h2>
-        <p class="takeaway" id="take-map"></p>
-      </div>
-      <div class="pair">
-        <div class="card">
-          <h3 class="card-title">Days to the customer’s door</h3>
-          <div id="chart-map" class="chart chart-map"></div>
-        </div>
-        <div class="card">
-          <h3 class="card-title">Lanes that would move on-time the most</h3>
-          <p class="takeaway tight" id="take-lanes"></p>
-          <div id="chart-lanes" class="chart chart-lanes"></div>
-        </div>
-      </div>
-      <div class="card desktop-only heatmap-card">
-        <h3 class="card-title">On-time by corridor</h3>
-        <p class="takeaway tight">Seller state across, customer state down. Darker red is further behind. Hover a cell for the volume.</p>
-        <div id="chart-heat" class="chart chart-heat"></div>
-      </div>
-    </section>
-
-    <section class="block" id="cycle">
-      <div class="block-head">
-        <h2>Where the days go</h2>
-        <p class="takeaway" id="take-cycle"></p>
-      </div>
-      <div class="card"><div id="chart-cycle" class="chart chart-short"></div></div>
-    </section>
-
-    <section class="block" id="reviews">
-      <div class="block-head">
-        <h2>Lateness and the review</h2>
-        <p class="takeaway" id="take-reviews"></p>
-      </div>
-      <div class="card"><div id="chart-reviews" class="chart"></div></div>
-    </section>
-
-    <section class="block" id="freight">
-      <div class="block-head">
-        <h2>Who freight hurts</h2>
-      </div>
-      <div class="pair">
-        <div class="card">
-          <h3 class="card-title">Freight as a share of the basket, by price</h3>
-          <p class="takeaway tight" id="take-freight-price"></p>
-          <div id="chart-freight-price" class="chart chart-short"></div>
-        </div>
-        <div class="card">
-          <h3 class="card-title">The same burden, by customer region</h3>
-          <p class="takeaway tight" id="take-freight-region"></p>
-          <div id="chart-freight-region" class="chart chart-short"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="block" id="sellers">
-      <div class="block-head">
-        <h2>Sellers: concentration, and the ones the promise hides</h2>
-        <p class="takeaway" id="take-sellers"></p>
-      </div>
-      <div class="pair">
-        <div class="card">
-          <h3 class="card-title">Share of merchandise value</h3>
-          <div id="chart-pareto" class="chart chart-short"></div>
-        </div>
-        <div class="card">
-          <h3 class="card-title">Slowest handoffs, 100 deliveries or more</h3>
-          <div class="table-wrap" id="seller-table"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="block" id="categories">
-      <div class="block-head">
-        <h2>Categories</h2>
-        <p class="takeaway" id="take-categories"></p>
-      </div>
-      <div class="card table-card">
-        <div class="table-wrap" id="category-table"></div>
-      </div>
-    </section>
-
-    <section class="block" id="calendar">
-      <div class="block-head">
-        <h2>The week, and how people pay</h2>
-      </div>
-      <div class="pair">
-        <div class="card">
-          <h3 class="card-title">Seller handoff by the day the customer bought</h3>
-          <p class="takeaway tight" id="take-dow"></p>
-          <div id="chart-dow" class="chart chart-short"></div>
-        </div>
-        <div class="card">
-          <h3 class="card-title">Instalments, basket size and cancellation</h3>
-          <p class="takeaway tight" id="take-installments"></p>
-          <div id="chart-installments" class="chart chart-short"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="block" id="small">
-      <div class="block-head">
-        <h2>Small things we noticed</h2>
-      </div>
-      <div class="small-grid" id="small-grid"></div>
-    </section>
-
-    <section class="block" id="actions">
-      <div class="block-head">
-        <h2>Recommendations</h2>
-        <p class="deck">Each one says what to change and how big the pool of orders is. The lane maths is an upper bound, not a forecast.</p>
-      </div>
-      <div class="rec-grid" id="rec-grid"></div>
-    </section>
-  </main>
-
-  <footer class="foot">
-    <div class="wrap" id="footer-note"></div>
-  </footer>
-
-  <script src="assets/echarts.min.js"></script>
-  <script src="js/app.js"></script>
+  <p class="foot" id="footer-note"></p>
+</main>
+<script src="assets/echarts.min.js"></script>
+<script src="js/shared.js"></script>
+<script>Tower.boot("overview").catch((err) => { document.getElementById("page-deck").textContent = err.message; });</script>
 </body>
 </html>

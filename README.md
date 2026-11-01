@@ -6,9 +6,25 @@ The business question is simple. The on-time rate looks healthy. Is the operatio
 
 **Live dashboard:** [luciferdataengineer.github.io/supply-chain-control-tower](https://luciferdataengineer.github.io/supply-chain-control-tower/)
 
-![Delivery control tower, desktop](docs/dashboard-desktop.png)
+![Overview, desktop](docs/dashboard-desktop.png)
 
-A 390px capture is in [docs/dashboard-mobile.png](docs/dashboard-mobile.png).
+The overview at 390px is in [docs/dashboard-mobile.png](docs/dashboard-mobile.png). Desktop captures of the other pages are in [docs/pages/](docs/pages/).
+
+## Pages
+
+The control tower is seven short pages, with a tab bar that stays put and scrolls sideways on a phone. Each page is its own HTML file, so the URL can be shared.
+
+| Page | URL | What it answers |
+| --- | --- | --- |
+| Overview | `index.html` | Eight headline measures, with a sparkline and an 8-week change where the weekly series exists, plus the four findings that matter most |
+| Delivery | `delivery.html` | Promised days versus actual days, on-time by week with Black Friday and the worst week marked, and where the days go |
+| Routes | `routes.html` | Days by state, the lanes that would add the most on-time deliveries, and days by region |
+| Customers | `customers.html` | Stars by lateness, with the drop after three late days marked, and the mix of poor, middling and five-star reviews |
+| Freight | `freight.html` | Freight as a share of the basket, by price band and by region |
+| Sellers | `sellers.html` | The seller curve, with the 130-seller halfway mark, the slow handoffs, and the slow categories |
+| Actions | `actions.html` | Smaller findings and the recommendations, each with the size of the pool |
+
+There is no region or date filter on the pages. The published JSON is already aggregated, and a filter would either hide that or invent a cut the warehouse did not compute.
 
 ## What the closed cohort shows
 
@@ -212,6 +228,7 @@ Then serve the site:
 
 ```bash
 python -m http.server --directory site 8765
+# then open index.html, delivery.html, routes.html, customers.html, freight.html, sellers.html, actions.html
 ```
 
 The warehouse file and the raw Parquet are gitignored. CI rebuilds them from the pinned URLs. Generated dashboard JSON is gitignored too. The Pages workflow uploads the `site/` directory after the build, so the published site contains the JSON the pipeline just wrote.

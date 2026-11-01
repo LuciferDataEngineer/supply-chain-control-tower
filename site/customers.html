@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Customers · Control tower</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%2312383c'/%3E%3Cpath d='M7 21.5h18M9 17.5l7-7 7 7' stroke='%23f4f0e7' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="index.html">Control tower</a>
+  <nav class="nav" aria-label="Sections"><a href="index.html">Overview</a><a href="delivery.html">Delivery</a><a href="routes.html">Routes</a><a href="customers.html" aria-current="page">Customers</a><a href="freight.html">Freight</a><a href="sellers.html">Sellers</a><a href="actions.html">Actions</a></nav>
+</header>
+<main class="wrap" id="content">
+
+  <header class="page-head">
+    <h1 id="page-title">Customers</h1>
+    <p id="page-deck"></p>
+  </header>
+  <section class="card">
+    <h2>Average stars by how late the order was</h2>
+    <div id="chart-stars" class="chart"></div>
+  </section>
+  <section class="card section">
+    <h2>Share of reviews that are poor, middling, or five stars</h2>
+    <p class="means" id="means-mix"></p>
+    <div id="chart-mix" class="chart"></div>
+  </section>
+
+  <p class="foot" id="footer-note"></p>
+</main>
+<script src="assets/echarts.min.js"></script>
+<script src="js/shared.js"></script>
+<script>Tower.boot("customers").catch((err) => { document.getElementById("page-deck").textContent = err.message; });</script>
+</body>
+</html>
