@@ -1,0 +1,6 @@
+dbt-core==1.12.6
+dbt-duckdb==1.11.1
+dagster==1.13.28
+duckdb==2.0.0
+holidays==0.107
+pytest==9.2.0

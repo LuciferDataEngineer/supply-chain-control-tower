@@ -1,0 +1,32 @@
+{% macro state_name(state_col) -%}
+case {{ state_col }}
+    when 'AC' then 'Acre'
+    when 'AL' then 'Alagoas'
+    when 'AM' then 'Amazonas'
+    when 'AP' then 'Amapá'
+    when 'BA' then 'Bahia'
+    when 'CE' then 'Ceará'
+    when 'DF' then 'Distrito Federal'
+    when 'ES' then 'Espírito Santo'
+    when 'GO' then 'Goiás'
+    when 'MA' then 'Maranhão'
+    when 'MG' then 'Minas Gerais'
+    when 'MS' then 'Mato Grosso do Sul'
+    when 'MT' then 'Mato Grosso'
+    when 'PA' then 'Pará'
+    when 'PB' then 'Paraíba'
+    when 'PE' then 'Pernambuco'
+    when 'PI' then 'Piauí'
+    when 'PR' then 'Paraná'
+    when 'RJ' then 'Rio de Janeiro'
+    when 'RN' then 'Rio Grande do Norte'
+    when 'RO' then 'Rondônia'
+    when 'RR' then 'Roraima'
+    when 'RS' then 'Rio Grande do Sul'
+    when 'SC' then 'Santa Catarina'
+    when 'SE' then 'Sergipe'
+    when 'SP' then 'São Paulo'
+    when 'TO' then 'Tocantins'
+    else {{ state_col }}
+end
+{%- endmacro %}

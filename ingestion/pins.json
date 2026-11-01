@@ -1,0 +1,64 @@
+{
+  "dataset": {
+    "name": "Brazilian E-Commerce Public Dataset by Olist",
+    "publisher": "Olist",
+    "canonical_url": "https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce",
+    "license": "CC BY-NC-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  },
+  "mirror": {
+    "repo": "olist/work-at-olist-data",
+    "commit": "d9e49802f3e92d09ee94ab9ccc5e457f207a8959",
+    "committed_at": "2022-03-04T16:26:13Z",
+    "repo_license": "MIT",
+    "repo_url": "https://github.com/olist/work-at-olist-data",
+    "why": "Official Olist GitHub mirror of the public dataset. Raw files are fetched from this pinned commit so the pipeline does not need a Kaggle login."
+  },
+  "files": [
+    {
+      "name": "orders",
+      "filename": "olist_orders_dataset.csv",
+      "sha256": "8df58ef3d2d7e9944010f7beecd9b75367f5588ec6e3c91cec19ae3345ef9ecf"
+    },
+    {
+      "name": "customers",
+      "filename": "olist_customers_dataset.csv",
+      "sha256": "c26c17f59f3027a6a0dbeb8f1fa373c38f3323ecc84f225a8f4820e5bb288df8"
+    },
+    {
+      "name": "order_items",
+      "filename": "olist_order_items_dataset.csv",
+      "sha256": "4f6abdbbc94036d0df4a76fa0520c072e31a40119d70f7f370fba1e2285d2bcb"
+    },
+    {
+      "name": "payments",
+      "filename": "olist_order_payments_dataset.csv",
+      "sha256": "61674868ed7b872aac3dcd95bf774448a88f6426b183f21be55f75af021ffdec"
+    },
+    {
+      "name": "reviews",
+      "filename": "olist_order_reviews_dataset.csv",
+      "sha256": "012b61c7593e34f51fa614efdf802b9c7056ce6aae5307ddb93236e7cfc797d7"
+    },
+    {
+      "name": "products",
+      "filename": "olist_products_dataset.csv",
+      "sha256": "3e6569628a17fbc75fd206ee357b59e20364b9afa90f5b6cd5b4d624c58aa9cc"
+    },
+    {
+      "name": "sellers",
+      "filename": "olist_sellers_dataset.csv",
+      "sha256": "31eb9bd50d684526a78f2389413ce61841e97692de7b828fe7d956b534586312"
+    },
+    {
+      "name": "geolocation",
+      "filename": "olist_geolocation_dataset.csv",
+      "sha256": "b514f6fc991b9566aeba02aa5d67e2c3630f034b60a0e05aa0d082a3b66d88d6"
+    },
+    {
+      "name": "category_translation",
+      "filename": "product_category_name_translation.csv",
+      "sha256": "a81f0d1f27b27e7293f761bc79e3ce8f348ee39c4b3ed3e49bde38f478586278"
+    }
+  ]
+}
