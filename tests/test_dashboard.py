@@ -8,7 +8,15 @@ import duckdb
 
 ROOT = Path(__file__).resolve().parents[1]
 DASHBOARD = ROOT / "site" / "data" / "dashboard.json"
-HTML = ROOT / "site" / "index.html"
+PAGES = [
+    "index.html",
+    "delivery.html",
+    "routes.html",
+    "customers.html",
+    "freight.html",
+    "sellers.html",
+    "actions.html",
+]
 WAREHOUSE = os.environ.get("WAREHOUSE_PATH", str(ROOT / "data" / "warehouse" / "logistics.duckdb"))
 
 
@@ -17,11 +25,17 @@ def _payload():
 
 
 def test_page_does_not_hardcode_results():
-    html = HTML.read_text()
-    assert "93.2" not in html
-    assert "R$" not in html
-    assert "TODO" not in html
-    assert "lorem" not in html.lower()
+    index = (ROOT / "site" / "index.html").read_text()
+    assert 'href="delivery.html"' in index
+    assert 'href="actions.html"' in index
+    for name in PAGES:
+        html = (ROOT / "site" / name).read_text()
+        assert "93.2" not in html
+        assert "R$" not in html
+        assert "TODO" not in html
+        assert "lorem" not in html.lower()
+        assert "js/shared.js" in html
+        assert 'aria-current="page"' in html
 
 
 def test_headline_matches_the_warehouse():
